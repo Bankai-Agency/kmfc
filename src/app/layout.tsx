@@ -64,6 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script src="https://dashboard.mooonai.com/cdn/moon-ai-chat-plugin/v1.1.0/moon-ai-site-chat.min.js" defer />
+        <script
+          defer
+          dangerouslySetInnerHTML={{
+            __html: `initMoonAIChat({ "uuid": "9d9fb1d9-ae76-45b6-ab5f-6bade6bc4345" });`,
+          }}
+        />
       </head>
       <body className={inter.className}>
         <Header />
