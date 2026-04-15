@@ -86,18 +86,18 @@ export default function Hero({ data, collateralImageLabel, collateralImage }: He
             </div>
           </div>
 
-          {/* Right: collateral photo */}
-          <div className="overflow-hidden rounded-2xl">
+          {/* Right: collateral illustration */}
+          <div className="relative flex items-center justify-center lg:-my-8">
             {collateralImage ? (
               <img
                 src={collateralImage}
                 alt={collateralImageLabel}
-                className="h-full w-full object-cover aspect-[4/3]"
+                className="h-auto w-full max-w-[640px] object-contain drop-shadow-2xl"
               />
             ) : (
               <ImagePlaceholder
                 label={collateralImageLabel}
-                aspectRatio="aspect-[4/3]"
+                aspectRatio="aspect-square"
                 className="border-white/10 bg-white/5 text-white/40"
               />
             )}
