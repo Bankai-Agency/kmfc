@@ -37,9 +37,13 @@ export default function LandingPage() {
       <Conditions data={page.conditions} />
       <Calculator {...page.calculator} />
       <CTABanner
-        title="Готовы получить деньги на развитие бизнеса?"
-        subtitle="Оставьте заявку — решение за 1 час"
-        variant="dark"
+        title="Как получить лучшие условия и больше шансов на одобрение"
+        bullets={[
+          "Одобрение за 1 час — решение по заявке в день обращения",
+          "Ставка от 3% в месяц, ГЭСВ не превышает 46%",
+          "Без комиссий и скрытых платежей",
+          "Залог остаётся у вас — вы продолжаете им пользоваться",
+        ]}
       />
       <Testimonials />
       <Guarantee />

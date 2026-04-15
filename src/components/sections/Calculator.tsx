@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import Container from "@/components/ui/Container";
-import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 interface CalculatorProps {
@@ -52,117 +51,187 @@ export default function Calculator({
   defaultRate = 3,
 }: CalculatorProps) {
   const [amount, setAmount] = useState(Math.round((minAmount + maxAmount) / 2));
-  const [term, setTerm] = useState(Math.round((minTerm + maxTerm) / 2));
-  const [rate] = useState(defaultRate);
+  const [term, setTerm] = useState(Math.round((minTerm + maxTerm) / 2 / 6) * 6);
+  const rate = defaultRate;
+
+  // Dropdown options in 6-month steps, clamped to [minTerm, maxTerm]
+  const termOptions = useMemo(() => {
+    const opts: number[] = [];
+    for (let m = Math.max(6, minTerm); m <= maxTerm; m += 6) opts.push(m);
+    if (opts[0] !== minTerm && minTerm < opts[0]) opts.unshift(minTerm);
+    if (opts[opts.length - 1] !== maxTerm) opts.push(maxTerm);
+    return opts;
+  }, [minTerm, maxTerm]);
 
   const result = useMemo(() => {
     const monthlyRate = rate / 100;
-    const monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+    const monthlyPayment =
+      (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) /
+      (Math.pow(1 + monthlyRate, term) - 1);
     const totalPayment = monthlyPayment * term;
     const overpayment = totalPayment - amount;
     return { monthlyPayment, totalPayment, overpayment };
   }, [amount, term, rate]);
 
-  const amountPercent = ((amount - minAmount) / (maxAmount - minAmount)) * 100;
-  const termPercent = ((term - minTerm) / (maxTerm - minTerm)) * 100;
+  // ГЭСВ не превышает 46% (фикс из данных кредитного продукта)
+  const gesv = 46;
+
+  function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const digits = e.target.value.replace(/\D/g, "");
+    if (!digits) {
+      setAmount(minAmount);
+      return;
+    }
+    const n = Math.min(maxAmount, Math.max(minAmount, Number(digits)));
+    setAmount(n);
+  }
+
+  const termLabel = (m: number) => {
+    const years = Math.floor(m / 12);
+    const months = m % 12;
+    const parts: string[] = [`${m} мес`];
+    if (years > 0) {
+      const y = years === 1 ? "1 год" : years >= 2 && years <= 4 ? `${years} года` : `${years} лет`;
+      parts.push(`(${y}${months ? ` ${months} мес` : ""})`);
+    }
+    return parts.join(" ");
+  };
 
   return (
-    <Section bg="white" id="calculator" spacing="lg">
+    <section
+      id="calculator"
+      className="bg-gradient-to-b from-brand-50 to-white py-16 sm:py-20"
+    >
       <Container>
         <AnimateOnScroll>
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Рассчитайте платёж</h2>
-          <p className="mt-2 text-center text-neutral-500">Узнайте примерный ежемесячный платёж по кредиту</p>
-        </AnimateOnScroll>
+          <div className="rounded-3xl bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] ring-1 ring-neutral-100 sm:p-10 lg:p-12">
+            <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl">
+              Рассчитайте платёж по кредиту
+            </h2>
 
-        <AnimateOnScroll delay={0.2}>
-          <div className="mx-auto mt-10 max-w-4xl">
-            <div className="grid gap-8 lg:grid-cols-5">
-              <div className="space-y-8 lg:col-span-3">
+            {/* Top grid: inputs (left) + info (right) */}
+            <div className="mt-8 grid gap-6 lg:grid-cols-2 lg:gap-8">
+              {/* Inputs */}
+              <div className="space-y-5">
                 <div>
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-neutral-600">Сумма кредита</label>
-                    <span className="text-lg font-bold text-brand-500">{formatNumber(amount)} ₸</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={minAmount}
-                    max={maxAmount}
-                    step={100_000}
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-neutral-200 accent-brand-500"
-                    style={{
-                      background: `linear-gradient(to right, #00B4CD 0%, #00B4CD ${amountPercent}%, #e9ecef ${amountPercent}%, #e9ecef 100%)`,
-                    }}
-                  />
-                  <div className="mt-1 flex justify-between text-xs text-neutral-400">
-                    <span>{formatNumber(minAmount)} ₸</span>
-                    <span>{formatNumber(maxAmount)} ₸</span>
+                  <label className="block text-sm font-medium text-neutral-600">
+                    Срок кредита
+                  </label>
+                  <div className="relative mt-2">
+                    <select
+                      value={term}
+                      onChange={(e) => setTerm(Number(e.target.value))}
+                      className="w-full appearance-none rounded-2xl border border-neutral-200 bg-white px-5 py-4 pr-12 text-base font-medium text-neutral-900 outline-none transition-colors focus:border-brand-500"
+                    >
+                      {termOptions.map((m) => (
+                        <option key={m} value={m}>
+                          {termLabel(m)}
+                        </option>
+                      ))}
+                    </select>
+                    <svg
+                      className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-neutral-400"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-neutral-600">Срок кредита</label>
-                    <span className="text-lg font-bold text-brand-500">{term} мес</span>
+                  <label className="block text-sm font-medium text-neutral-600">
+                    Сумма кредита
+                  </label>
+                  <div className="relative mt-2">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={formatNumber(amount)}
+                      onChange={handleAmountChange}
+                      className="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-4 pr-12 text-base font-medium text-neutral-900 outline-none transition-colors focus:border-brand-500"
+                    />
+                    <span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-neutral-400">
+                      ₸
+                    </span>
                   </div>
-                  <input
-                    type="range"
-                    min={minTerm}
-                    max={maxTerm}
-                    step={1}
-                    value={term}
-                    onChange={(e) => setTerm(Number(e.target.value))}
-                    className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-neutral-200 accent-brand-500"
-                    style={{
-                      background: `linear-gradient(to right, #00B4CD 0%, #00B4CD ${termPercent}%, #e9ecef ${termPercent}%, #e9ecef 100%)`,
-                    }}
-                  />
-                  <div className="mt-1 flex justify-between text-xs text-neutral-400">
-                    <span>{minTerm} мес</span>
-                    <span>{maxTerm} мес</span>
+                  <div className="mt-1.5 text-xs text-neutral-400">
+                    от {formatNumber(minAmount)} до {formatNumber(maxAmount)} ₸
                   </div>
                 </div>
-
               </div>
 
-              <div className="flex flex-col justify-between rounded-2xl bg-brand-500 p-6 text-white lg:col-span-2">
-                <div>
-                  <div className="text-sm text-brand-100">Ежемесячный платёж</div>
-                  <div className="mt-1 text-3xl font-bold transition-all duration-300">
-                    <AnimatedNumber value={Math.round(result.monthlyPayment)} /> ₸
-                  </div>
+              {/* Info block */}
+              <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+                <div className="flex items-center justify-between py-2">
+                  <span className="text-neutral-700">Ставка в месяц</span>
+                  <span className="text-base font-semibold text-neutral-900">
+                    {rate.toLocaleString("ru-RU")}&nbsp;%
+                  </span>
                 </div>
-                <div className="mt-6 space-y-3 border-t border-white/20 pt-6">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-brand-100">Сумма кредита</span>
-                    <span className="font-medium">{formatNumber(amount)} ₸</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-brand-100">Всего выплатите</span>
-                    <span className="font-medium"><AnimatedNumber value={Math.round(result.totalPayment)} /> ₸</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-brand-100">Переплата</span>
-                    <span className="font-medium"><AnimatedNumber value={Math.round(result.overpayment)} /> ₸</span>
-                  </div>
+                <div className="mt-2 flex items-center justify-between border-t border-neutral-100 py-2 pt-4">
+                  <span className="flex items-center gap-1.5 text-neutral-700">
+                    ГЭСВ
+                    <Info size={14} strokeWidth={2} className="text-neutral-400" />
+                  </span>
+                  <span className="text-base font-semibold text-neutral-900">
+                    не&nbsp;более&nbsp;{gesv},00&nbsp;%
+                  </span>
                 </div>
-                <a
-                  href="#form"
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-accent-400 px-6 py-3 font-semibold text-neutral-900 transition-colors hover:bg-accent-500"
-                >
-                  Получить на этих условиях
-                  <ArrowRight size={18} strokeWidth={2} />
-                </a>
               </div>
             </div>
 
-            <p className="mt-4 text-center text-xs text-neutral-400">
-              Расчёт является предварительным. Точные условия определяются после оценки залогового имущества.
-            </p>
+            {/* Result tiles */}
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              <div className="rounded-2xl bg-brand-50 p-6 sm:p-7">
+                <div className="text-center text-base font-semibold text-neutral-900">
+                  Ежемесячный платёж
+                </div>
+                <div className="mt-1 text-center text-sm text-neutral-500">
+                  Аннуитетный платёж
+                </div>
+                <div className="mt-5 text-center text-3xl font-bold text-neutral-900 sm:text-[32px]">
+                  <AnimatedNumber value={Math.round(result.monthlyPayment)} />
+                  &nbsp;₸
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-neutral-50 p-6 sm:p-7">
+                <div className="text-center text-base font-semibold text-neutral-900">
+                  Переплата за весь срок
+                </div>
+                <div className="mt-1 text-center text-sm text-neutral-500">
+                  Срок {term} мес
+                </div>
+                <div className="mt-5 text-center text-3xl font-bold text-neutral-900 sm:text-[32px]">
+                  <AnimatedNumber value={Math.round(result.overpayment)} />
+                  &nbsp;₸
+                </div>
+              </div>
+            </div>
+
+            {/* CTA + disclaimer */}
+            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <a
+                href="#form"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-brand-600 sm:w-auto"
+              >
+                Получить на этих условиях
+                <ArrowRight size={18} strokeWidth={2.5} />
+              </a>
+              <p className="text-xs text-neutral-400 sm:max-w-sm sm:text-right">
+                Предварительный расчёт. Не&nbsp;является публичной офертой.
+              </p>
+            </div>
           </div>
         </AnimateOnScroll>
       </Container>
-    </Section>
+    </section>
   );
 }

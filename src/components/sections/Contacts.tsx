@@ -27,30 +27,31 @@ export default function Contacts() {
           <p className="mt-1 text-center text-sm text-neutral-400">{CONTACT_INFO.license}</p>
         </AnimateOnScroll>
 
-        {/* Phone block */}
+        {/* Phone block — Sber-style pills */}
         <AnimateOnScroll>
-          <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl bg-neutral-900 p-6 text-white sm:flex-row sm:justify-center sm:gap-8">
+          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
             <a
               href={`https://wa.me/${CONTACT_INFO.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 transition-colors hover:text-green-400"
+              className="inline-flex items-center justify-center gap-3 rounded-full bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
             >
-              <MessageCircle size={18} strokeWidth={1.8} />
-              <span className="text-sm text-neutral-400">WhatsApp</span>
+              <MessageCircle size={20} strokeWidth={2} className="shrink-0 text-neutral-500" />
+              <span>
+                WhatsApp{" "}
+                <span className="font-semibold">{CONTACT_INFO.whatsappDisplay}</span>
+              </span>
             </a>
             <a
-              href={telHref(CONTACT_INFO.whatsappDisplay)}
-              className="text-3xl font-bold transition-colors hover:text-brand-300 sm:text-4xl"
+              href={telHref(CONTACT_INFO.phones[0])}
+              className="inline-flex items-center justify-center gap-3 rounded-full bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
             >
-              {CONTACT_INFO.whatsappDisplay}
+              <Phone size={20} strokeWidth={2} className="shrink-0 text-neutral-500" />
+              <span>
+                По телефону{" "}
+                <span className="font-semibold">{CONTACT_INFO.phones[0]}</span>
+              </span>
             </a>
-            <div className="flex items-center gap-2 text-sm text-neutral-400">
-              <Phone size={14} strokeWidth={1.8} />
-              <a href={telHref(CONTACT_INFO.phones[0])} className="hover:text-white">
-                {CONTACT_INFO.phones[0]}
-              </a>
-            </div>
           </div>
         </AnimateOnScroll>
 

@@ -20,10 +20,10 @@ export default function Guarantee() {
           <p className="mt-2 text-center text-neutral-400">Лицензированная МФО под контролем АРРФР</p>
         </AnimateOnScroll>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {GUARANTEES.map((g, i) => (
-            <AnimateOnScroll key={g.title} delay={i * 0.1}>
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 text-center">
+            <AnimateOnScroll key={g.title} delay={i * 0.1} className="h-full">
+              <div className="flex h-full flex-col rounded-2xl border border-neutral-800 bg-neutral-800/50 p-6 text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/20">
                   <g.icon size={24} strokeWidth={1.8} className="text-brand-400" />
                 </div>
