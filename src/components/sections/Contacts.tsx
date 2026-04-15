@@ -1,15 +1,19 @@
 "use client";
 
-import { Phone, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Clock, MessageCircle, Mail } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/data";
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 const OFFICE_IMAGES: Record<string, string> = {
-  "Алматы": "/images/office-almaty.png",
-  "Актобе": "/images/office-aktobe.png",
+  Алматы: "/images/office-almaty.png",
+  Актобе: "/images/office-aktobe.png",
 };
+
+function telHref(phone: string): string {
+  return `tel:${phone.replace(/[^+\d]/g, "")}`;
+}
 
 export default function Contacts() {
   return (
@@ -17,7 +21,9 @@ export default function Contacts() {
       <Container>
         <AnimateOnScroll>
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Контакты</h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-neutral-500">{CONTACT_INFO.companyName}</p>
+          <p className="mx-auto mt-2 max-w-lg text-center text-neutral-500">
+            {CONTACT_INFO.companyName}
+          </p>
           <p className="mt-1 text-center text-sm text-neutral-400">{CONTACT_INFO.license}</p>
         </AnimateOnScroll>
 
@@ -34,14 +40,16 @@ export default function Contacts() {
               <span className="text-sm text-neutral-400">WhatsApp</span>
             </a>
             <a
-              href="tel:+77073555565"
+              href={telHref(CONTACT_INFO.whatsappDisplay)}
               className="text-3xl font-bold transition-colors hover:text-brand-300 sm:text-4xl"
             >
-              +7 (707) 355-55-65
+              {CONTACT_INFO.whatsappDisplay}
             </a>
             <div className="flex items-center gap-2 text-sm text-neutral-400">
               <Phone size={14} strokeWidth={1.8} />
-              <a href="tel:+77273555565" className="hover:text-white">+7 (727) 355-55-65</a>
+              <a href={telHref(CONTACT_INFO.phones[0])} className="hover:text-white">
+                {CONTACT_INFO.phones[0]}
+              </a>
             </div>
           </div>
         </AnimateOnScroll>
@@ -61,11 +69,53 @@ export default function Contacts() {
                   <h3 className="text-lg font-semibold">{office.city}</h3>
                   <div className="mt-4 space-y-3">
                     <div className="flex items-start gap-3">
-                      <MapPin size={20} strokeWidth={1.8} className="mt-0.5 shrink-0 text-brand-500" />
+                      <MapPin
+                        size={20}
+                        strokeWidth={1.8}
+                        className="mt-0.5 shrink-0 text-brand-500"
+                      />
                       <span className="text-neutral-600">{office.address}</span>
                     </div>
+
                     <div className="flex items-start gap-3">
-                      <Clock size={20} strokeWidth={1.8} className="mt-0.5 shrink-0 text-brand-500" />
+                      <Phone
+                        size={20}
+                        strokeWidth={1.8}
+                        className="mt-0.5 shrink-0 text-brand-500"
+                      />
+                      <div className="flex flex-col gap-1">
+                        {office.phones.map((p) => (
+                          <a
+                            key={p}
+                            href={telHref(p)}
+                            className="text-neutral-600 transition-colors hover:text-brand-600"
+                          >
+                            {p}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Mail
+                        size={20}
+                        strokeWidth={1.8}
+                        className="mt-0.5 shrink-0 text-brand-500"
+                      />
+                      <a
+                        href={`mailto:${office.email}`}
+                        className="text-neutral-600 transition-colors hover:text-brand-600"
+                      >
+                        {office.email}
+                      </a>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Clock
+                        size={20}
+                        strokeWidth={1.8}
+                        className="mt-0.5 shrink-0 text-brand-500"
+                      />
                       <span className="text-neutral-600">{office.hours}</span>
                     </div>
                   </div>

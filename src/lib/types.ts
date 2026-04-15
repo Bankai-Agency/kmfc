@@ -6,6 +6,7 @@ export interface HeroData {
   title: string;
   subtitle: string;
   stats: { value: string; label: string }[];
+  offer?: string;
 }
 
 export interface ConditionsData {
@@ -24,6 +25,11 @@ export interface Step {
   title: string;
   description: string;
   time: string;
+}
+
+export interface FAQItem {
+  question: string;
+  answer: string;
 }
 
 export interface CollateralCard {
@@ -53,13 +59,24 @@ export interface PageData {
   benefits: Benefit[];
   steps: Step[];
   calculator: CalculatorDefaults;
+  faq: FAQItem[];
+}
+
+export interface OfficeInfo {
+  city: string;
+  address: string;
+  phones: string[];
+  email: string;
+  hours: string;
 }
 
 export interface ContactInfo {
   companyName: string;
   license: string;
+  licenseFull: string;
+  rates: { label: string; value: string }[];
   phones: string[];
   whatsapp: string;
   whatsappDisplay: string;
-  offices: { city: string; address: string; hours: string }[];
+  offices: OfficeInfo[];
 }

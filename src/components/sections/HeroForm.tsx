@@ -4,11 +4,13 @@ import { FormEvent, useState } from "react";
 import { Loader2, CheckCircle, Phone, Shield } from "lucide-react";
 import { CollateralType } from "@/lib/types";
 import { CONTACT_INFO } from "@/lib/data";
+import { formatPhoneKz, stripPhoneToDigits } from "@/lib/phone";
 import Container from "@/components/ui/Container";
 
 export default function HeroForm({ collateralType }: { collateralType: CollateralType }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,7 +20,7 @@ export default function HeroForm({ collateralType }: { collateralType: Collatera
     const params = new URLSearchParams(window.location.search);
     const body: Record<string, string> = {
       name: formData.get("name") as string,
-      phone: formData.get("phone") as string,
+      phone: stripPhoneToDigits(phone),
       collateral_type: collateralType,
       source: "hero_form",
     };
@@ -62,12 +64,9 @@ export default function HeroForm({ collateralType }: { collateralType: Collatera
           </div>
         ) : (
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-            {/* Left: text */}
+            {/* Left: short trust line (without "Получите решение за 15 минут") */}
             <div className="shrink-0">
-              <h2 className="text-lg font-bold sm:text-xl">
-                Получите решение за 15 минут
-              </h2>
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-white/60">
+              <p className="flex items-center gap-1.5 text-sm text-white/70">
                 <Shield size={14} strokeWidth={2} className="shrink-0" />
                 Бесплатно, без обязательств. Данные защищены.
               </p>
@@ -85,7 +84,10 @@ export default function HeroForm({ collateralType }: { collateralType: Collatera
               <input
                 type="tel"
                 name="phone"
+                inputMode="tel"
                 placeholder="+7 (___) ___-__-__"
+                value={phone}
+                onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
                 required
                 className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400 sm:w-auto sm:flex-1"
               />

@@ -1,22 +1,21 @@
 "use client";
 
-import { Shield, Calendar, Users, MapPin, Award } from "lucide-react";
+import { Shield, Calendar, MapPin, TrendingUp } from "lucide-react";
 import Container from "@/components/ui/Container";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 
 const SIGNALS = [
   { icon: Calendar, value: "10+", suffix: " лет", label: "на рынке Казахстана" },
-  { icon: Users, value: "1 000+", suffix: "", label: "довольных клиентов" },
   { icon: MapPin, value: "2", suffix: " офиса", label: "в Алматы и Актобе" },
-  { icon: Shield, value: "", suffix: "Лицензия НБ РК", label: "официальная МФО" },
-  { icon: Award, value: "99%", suffix: "", label: "одобрение заявок" },
+  { icon: Shield, value: "", suffix: "Лицензия АРРФР", label: "официальная МФО" },
+  { icon: TrendingUp, value: "до 70%", suffix: "", label: "от оценки залога для повторных клиентов" },
 ];
 
 export default function TrustSignals() {
   return (
     <div className="border-y border-neutral-100 bg-white py-8">
       <Container>
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {SIGNALS.map((s) => (
             <div key={s.label} className="flex flex-col items-center text-center">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100">

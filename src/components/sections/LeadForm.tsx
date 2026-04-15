@@ -2,10 +2,6 @@
 
 import { useState, useCallback, FormEvent, useRef, useEffect } from "react";
 import {
-  Home,
-  LandPlot,
-  Car,
-  Truck,
   ArrowRight,
   ArrowLeft,
   Loader2,
@@ -15,6 +11,8 @@ import {
   Shield,
 } from "lucide-react";
 import { CollateralType } from "@/lib/types";
+import { PAGES_DATA } from "@/lib/data";
+import { formatPhoneKz, stripPhoneToDigits } from "@/lib/phone";
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
@@ -23,20 +21,13 @@ interface LeadFormProps {
   collateralType: CollateralType;
 }
 
-const TOTAL_STEPS = 4;
-
-const COLLATERAL_OPTIONS = [
-  { value: "nedvizhimost" as CollateralType, label: "Недвижимость", icon: Home },
-  { value: "zemelnyj-uchastok" as CollateralType, label: "Земельный участок", icon: LandPlot },
-  { value: "avto" as CollateralType, label: "Автомобиль", icon: Car },
-  { value: "spectehnika" as CollateralType, label: "Спецтехника", icon: Truck },
-];
+const TOTAL_STEPS = 3;
 
 const AMOUNT_OPTIONS = [
-  { value: "до 1 млн ₸", label: "до 1 млн ₸" },
   { value: "1-5 млн ₸", label: "1-5 млн ₸" },
   { value: "5-15 млн ₸", label: "5-15 млн ₸" },
-  { value: "15-30 млн ₸", label: "15-30 млн ₸" },
+  { value: "15-40 млн ₸", label: "15-40 млн ₸" },
+  { value: "40-86 млн ₸", label: "40-86 млн ₸" },
 ];
 
 const URGENCY_OPTIONS = [
@@ -46,7 +37,6 @@ const URGENCY_OPTIONS = [
 ];
 
 const STEP_TITLES = [
-  "Что вы хотите заложить?",
   "Какая сумма вам нужна?",
   "Как срочно нужны деньги?",
   "Оставьте контакты",
@@ -64,9 +54,10 @@ function getUtmParams(): Record<string, string> {
 }
 
 export default function LeadForm({ collateralType }: LeadFormProps) {
+  const offerBadge = PAGES_DATA[collateralType]?.hero.offer;
+
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({
-    collateral: collateralType,
     amount: "",
     urgency: "",
   });
@@ -116,21 +107,11 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
     if (step > 0) animateToStep(step - 1);
   }, [step, animateToStep]);
 
-  const selectCollateral = useCallback(
-    (value: CollateralType) => {
-      setAnswers((prev) => ({ ...prev, collateral: value }));
-      autoAdvanceTimer.current = setTimeout(() => {
-        animateToStep(1);
-      }, 300);
-    },
-    [animateToStep],
-  );
-
   const selectAmount = useCallback(
     (value: string) => {
       setAnswers((prev) => ({ ...prev, amount: value }));
       autoAdvanceTimer.current = setTimeout(() => {
-        animateToStep(2);
+        animateToStep(1);
       }, 300);
     },
     [animateToStep],
@@ -140,7 +121,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
     (value: string) => {
       setAnswers((prev) => ({ ...prev, urgency: value }));
       autoAdvanceTimer.current = setTimeout(() => {
-        animateToStep(3);
+        animateToStep(2);
       }, 300);
     },
     [animateToStep],
@@ -152,8 +133,8 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
 
     const payload = {
       name,
-      phone,
-      collateral_type: answers.collateral,
+      phone: stripPhoneToDigits(phone),
+      collateral_type: collateralType,
       amount: answers.amount,
       urgency: answers.urgency,
       source: "quiz_form",
@@ -197,7 +178,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
                   <Clock size={20} strokeWidth={1.8} className="text-white" />
                 </div>
-                <span className="text-brand-100">Перезвоним в течение 15 минут</span>
+                <span className="text-brand-100">Перезвоним в ближайшее время</span>
               </div>
 
               <div className="flex items-center gap-3">
@@ -240,12 +221,14 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
       <Container>
         <AnimateOnScroll>
           <div className="mx-auto max-w-2xl">
-            {/* Urgency badge */}
-            <div className="mb-6 text-center">
-              <span className="inline-block rounded-full bg-accent-400 px-4 py-1.5 text-sm font-medium text-neutral-900">
-                Бесплатная оценка залога при заявке до конца месяца
-              </span>
-            </div>
+            {/* Offer badge — показываем только если в data.ts задан hero.offer */}
+            {offerBadge && (
+              <div className="mb-6 text-center">
+                <span className="inline-block rounded-full bg-accent-400 px-4 py-1.5 text-sm font-medium text-neutral-900">
+                  {offerBadge}
+                </span>
+              </div>
+            )}
 
             {/* Progress dots */}
             <div className="mb-8 flex items-center justify-center gap-2">
@@ -271,33 +254,8 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
 
             {/* Steps container */}
             <div style={stepStyle}>
-              {/* Step 0: Collateral type */}
+              {/* Step 0: Amount */}
               {renderStep === 0 && (
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  {COLLATERAL_OPTIONS.map((opt) => {
-                    const Icon = opt.icon;
-                    const isSelected = answers.collateral === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => selectCollateral(opt.value)}
-                        className={`flex flex-col items-center gap-3 rounded-2xl p-6 text-center transition-all duration-200 ${
-                          isSelected
-                            ? "bg-white/20 ring-2 ring-white"
-                            : "bg-white/10 hover:bg-white/15"
-                        }`}
-                      >
-                        <Icon size={32} strokeWidth={1.5} className="text-white" />
-                        <span className="text-sm font-medium sm:text-base">{opt.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Step 1: Amount */}
-              {renderStep === 1 && (
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {AMOUNT_OPTIONS.map((opt) => {
                     const isSelected = answers.amount === opt.value;
@@ -319,8 +277,8 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                 </div>
               )}
 
-              {/* Step 2: Urgency */}
-              {renderStep === 2 && (
+              {/* Step 1: Urgency */}
+              {renderStep === 1 && (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
                   {URGENCY_OPTIONS.map((opt) => {
                     const isSelected = answers.urgency === opt.value;
@@ -342,8 +300,8 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                 </div>
               )}
 
-              {/* Step 3: Contact form */}
-              {renderStep === 3 && (
+              {/* Step 2: Contact form */}
+              {renderStep === 2 && (
                 <div className="mx-auto max-w-md">
                   <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -375,8 +333,9 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                         <input
                           id="quiz-phone"
                           type="tel"
+                          inputMode="tel"
                           value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
+                          onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
                           placeholder="+7 (___) ___-__-__"
                           required
                           className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-900 placeholder-neutral-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/20"

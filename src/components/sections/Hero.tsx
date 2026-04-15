@@ -31,7 +31,7 @@ export default function Hero({ data, collateralImageLabel, collateralImage }: He
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm backdrop-blur-sm">
                 <Shield size={14} strokeWidth={2} />
-                Лицензия НБ РК
+                Лицензия АРРФР
               </span>
             </div>
 
@@ -45,11 +45,13 @@ export default function Hero({ data, collateralImageLabel, collateralImage }: He
               {data.subtitle}
             </p>
 
-            {/* Urgency badge */}
-            <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent-400/15 px-4 py-2 text-sm font-medium text-accent-400">
-              <Clock size={16} strokeWidth={2} />
-              Акция: бесплатная оценка залога до конца месяца
-            </div>
+            {/* Urgency badge — показываем только если задано data.offer */}
+            {data.offer && (
+              <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent-400/15 px-4 py-2 text-sm font-medium text-accent-400">
+                <Clock size={16} strokeWidth={2} />
+                {data.offer}
+              </div>
+            )}
 
             {/* CTA buttons */}
             <div className="mt-8 flex flex-wrap gap-3">

@@ -5,7 +5,7 @@ import Container from "@/components/ui/Container";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 const GUARANTEES = [
-  { icon: Clock, title: "Решение за 24 часа", description: "Или вернём деньги за оценку залога" },
+  { icon: Clock, title: "Решение за 1 час", description: "Оперативно принимаем решение, чтобы ваш бизнес не простаивал" },
   { icon: Shield, title: "Имущество в безопасности", description: "Вы продолжаете пользоваться залогом весь срок кредита" },
   { icon: FileCheck, title: "Прозрачный договор", description: "Все условия фиксируются до подписания — никаких сюрпризов" },
   { icon: Lock, title: "Защита данных", description: "Персональные данные защищены по Закону РК" },
@@ -17,7 +17,7 @@ export default function Guarantee() {
       <Container>
         <AnimateOnScroll>
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Наши гарантии</h2>
-          <p className="mt-2 text-center text-neutral-400">Лицензированная МФО под контролем Национального Банка РК</p>
+          <p className="mt-2 text-center text-neutral-400">Лицензированная МФО под контролем АРРФР</p>
         </AnimateOnScroll>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

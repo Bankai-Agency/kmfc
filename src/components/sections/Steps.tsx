@@ -12,7 +12,7 @@ export default function Steps({ data }: { data: Step[] }) {
       <Container>
         <AnimateOnScroll>
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Как получить кредит</h2>
-          <p className="mt-2 text-center text-neutral-500">Весь процесс занимает от 1 рабочего дня</p>
+          <p className="mt-2 text-center text-neutral-500">Решение за 1 час, деньги — в день регистрации залога</p>
         </AnimateOnScroll>
 
         <div className="relative mt-10">

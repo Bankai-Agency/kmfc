@@ -10,9 +10,7 @@ import Steps from "@/components/sections/Steps";
 import Conditions from "@/components/sections/Conditions";
 import Calculator from "@/components/sections/Calculator";
 import CTABanner from "@/components/sections/CTABanner";
-import ComparisonTable from "@/components/sections/ComparisonTable";
 import Guarantee from "@/components/sections/Guarantee";
-import ForWhom from "@/components/sections/ForWhom";
 import Testimonials from "@/components/sections/Testimonials";
 import OtherCollateral from "@/components/sections/OtherCollateral";
 import LeadForm from "@/components/sections/LeadForm";
@@ -27,7 +25,11 @@ export default function LandingPage() {
 
   return (
     <>
-      <Hero data={page.hero} collateralImageLabel={page.heroImageLabel ?? ""} collateralImage={page.heroImage} />
+      <Hero
+        data={page.hero}
+        collateralImageLabel={page.heroImageLabel ?? ""}
+        collateralImage={page.heroImage}
+      />
       <HeroForm collateralType={page.slug} />
       <TrustSignals />
       <Benefits data={page.benefits} />
@@ -35,17 +37,15 @@ export default function LandingPage() {
       <Conditions data={page.conditions} />
       <Calculator {...page.calculator} />
       <CTABanner
-        title="Готовы получить деньги?"
-        subtitle="Оставьте заявку — узнайте решение за 15 минут"
+        title="Готовы получить деньги на развитие бизнеса?"
+        subtitle="Оставьте заявку — решение за 1 час"
         variant="dark"
       />
       <Testimonials />
-      <ComparisonTable />
       <Guarantee />
-      <ForWhom />
       <OtherCollateral current={page.slug} />
       <LeadForm collateralType={page.slug} />
-      <FAQ />
+      <FAQ data={page.faq} />
       <Contacts />
     </>
   );

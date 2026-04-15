@@ -124,12 +124,6 @@ export default function Calculator({
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-neutral-50 p-5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-neutral-600">Процентная ставка</span>
-                    <span className="font-semibold text-neutral-800">{rate}% в месяц</span>
-                  </div>
-                </div>
               </div>
 
               <div className="flex flex-col justify-between rounded-2xl bg-brand-500 p-6 text-white lg:col-span-2">
