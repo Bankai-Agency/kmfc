@@ -121,8 +121,8 @@ export const PAGES_DATA: Record<string, PageData> = {
     metaTitle: "Кредит на развитие бизнеса под залог недвижимости — KMFC",
     metaDescription:
       "Кредит на развитие бизнеса под залог квартиры, дома или коммерческой недвижимости. Ставка 3,16% в месяц (ГЭСВ не превышает 46%), сумма до 86 000 000 ₸, срок до 60 месяцев. Одобрение за 1 час.",
-    heroImageLabel: "3D-иллюстрация жилого дома",
-    heroImage: "/images/hero-building.png",
+    heroImageLabel: "3D-иллюстрация дома под процент",
+    heroImage: "/images/hero-zalog-nedvizhimost.png",
     hero: {
       title: "Кредит на развитие бизнеса под залог недвижимости",
       subtitle:
@@ -217,8 +217,8 @@ export const PAGES_DATA: Record<string, PageData> = {
     metaTitle: "Кредит на развитие бизнеса под залог земельного участка — KMFC",
     metaDescription:
       "Кредит на развитие бизнеса под залог земельного участка. Ставка 3,16% в месяц (ГЭСВ не превышает 46%), сумма до 86 000 000 ₸, срок до 60 месяцев. Одобрение за 1 час.",
-    heroImageLabel: "3D-иллюстрация здания KMFC",
-    heroImage: "/images/hero-building.png",
+    heroImageLabel: "3D-иллюстрация земельного участка под процент",
+    heroImage: "/images/hero-zalog-uchastok.png",
     hero: {
       title: "Кредит на развитие бизнеса под залог земельного участка",
       subtitle:
@@ -311,8 +311,8 @@ export const PAGES_DATA: Record<string, PageData> = {
     metaTitle: "Кредит на развитие бизнеса под залог автомобиля — KMFC",
     metaDescription:
       "Кредит на развитие бизнеса под залог авто. Ставка 3,16% в месяц (ГЭСВ не превышает 46%), сумма до 86 000 000 ₸, срок до 60 месяцев. Авто остаётся у вас.",
-    heroImageLabel: "3D-иллюстрация здания KMFC",
-    heroImage: "/images/hero-building.png",
+    heroImageLabel: "3D-иллюстрация автомобиля под процент",
+    heroImage: "/images/hero-zalog-auto.png",
     hero: {
       title: "Кредит на развитие бизнеса под залог автомобиля",
       subtitle:
@@ -402,8 +402,8 @@ export const PAGES_DATA: Record<string, PageData> = {
     metaTitle: "Кредит на развитие бизнеса под залог спецтехники — KMFC",
     metaDescription:
       "Кредит на развитие бизнеса под залог спецтехники. Ставка 3,16% в месяц (ГЭСВ не превышает 46%), сумма до 86 000 000 ₸, срок до 60 месяцев. Финансируем от физ.лиц до крупных ТОО.",
-    heroImageLabel: "3D-иллюстрация здания KMFC",
-    heroImage: "/images/hero-building.png",
+    heroImageLabel: "3D-иллюстрация спецтехники под процент",
+    heroImage: "/images/hero-zalog-spec-tehnika.png",
     hero: {
       title: "Кредит на развитие бизнеса под залог спецтехники",
       subtitle:
