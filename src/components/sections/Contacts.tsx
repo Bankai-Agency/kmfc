@@ -34,7 +34,7 @@ export default function Contacts() {
               href={`https://wa.me/${CONTACT_INFO.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 rounded-full bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
+              className="inline-flex items-center justify-center gap-3 rounded-xl bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
             >
               <MessageCircle size={20} strokeWidth={2} className="shrink-0 text-neutral-500" />
               <span>
@@ -44,7 +44,7 @@ export default function Contacts() {
             </a>
             <a
               href={telHref(CONTACT_INFO.phones[0])}
-              className="inline-flex items-center justify-center gap-3 rounded-full bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
+              className="inline-flex items-center justify-center gap-3 rounded-xl bg-neutral-100 px-7 py-4 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
             >
               <Phone size={20} strokeWidth={2} className="shrink-0 text-neutral-500" />
               <span>

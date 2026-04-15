@@ -51,6 +51,7 @@ export default function Calculator({
   defaultRate = 3,
 }: CalculatorProps) {
   const [amount, setAmount] = useState(Math.round((minAmount + maxAmount) / 2));
+  const [amountInput, setAmountInput] = useState<string | null>(null);
   const [term, setTerm] = useState(Math.round((minTerm + maxTerm) / 2 / 6) * 6);
   const rate = defaultRate;
 
@@ -63,7 +64,12 @@ export default function Calculator({
     return opts;
   }, [minTerm, maxTerm]);
 
+  const isBelowMin = amount < minAmount;
+
   const result = useMemo(() => {
+    if (isBelowMin) {
+      return { monthlyPayment: 0, totalPayment: 0, overpayment: 0 };
+    }
     const monthlyRate = rate / 100;
     const monthlyPayment =
       (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) /
@@ -71,19 +77,28 @@ export default function Calculator({
     const totalPayment = monthlyPayment * term;
     const overpayment = totalPayment - amount;
     return { monthlyPayment, totalPayment, overpayment };
-  }, [amount, term, rate]);
+  }, [amount, term, rate, isBelowMin]);
 
   // ГЭСВ не превышает 46% (фикс из данных кредитного продукта)
   const gesv = 46;
 
   function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
     const digits = e.target.value.replace(/\D/g, "");
+    setAmountInput(digits);
     if (!digits) {
-      setAmount(minAmount);
+      setAmount(0);
       return;
     }
-    const n = Math.min(maxAmount, Math.max(minAmount, Number(digits)));
+    // Only clamp to max while typing — allow below min until blur
+    const n = Math.min(maxAmount, Number(digits));
     setAmount(n);
+  }
+
+  function handleAmountBlur() {
+    // On blur: clamp max only. Leave below-min state visible so user sees the warning.
+    const n = Math.min(maxAmount, amount);
+    setAmount(n);
+    setAmountInput(null);
   }
 
   const termLabel = (m: number) => {
@@ -153,16 +168,37 @@ export default function Calculator({
                     <input
                       type="text"
                       inputMode="numeric"
-                      value={formatNumber(amount)}
+                      value={
+                        amountInput !== null
+                          ? amountInput
+                            ? formatNumber(Number(amountInput))
+                            : ""
+                          : formatNumber(amount)
+                      }
                       onChange={handleAmountChange}
-                      className="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-4 pr-12 text-base font-medium text-neutral-900 outline-none transition-colors focus:border-brand-500"
+                      onBlur={handleAmountBlur}
+                      className={`w-full rounded-2xl border bg-white px-5 py-4 pr-12 text-base font-medium outline-none transition-colors ${
+                        isBelowMin
+                          ? "border-red-400 text-red-600 focus:border-red-500"
+                          : "border-neutral-200 text-neutral-900 focus:border-brand-500"
+                      }`}
                     />
-                    <span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-neutral-400">
+                    <span
+                      className={`pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 ${
+                        isBelowMin ? "text-red-400" : "text-neutral-400"
+                      }`}
+                    >
                       ₸
                     </span>
                   </div>
-                  <div className="mt-1.5 text-xs text-neutral-400">
-                    от {formatNumber(minAmount)} до {formatNumber(maxAmount)} ₸
+                  <div
+                    className={`mt-1.5 text-xs ${
+                      isBelowMin ? "font-medium text-red-500" : "text-neutral-400"
+                    }`}
+                  >
+                    {isBelowMin
+                      ? `Минимальная сумма — ${formatNumber(minAmount)} ₸`
+                      : `от ${formatNumber(minAmount)} до ${formatNumber(maxAmount)} ₸`}
                   </div>
                 </div>
               </div>
@@ -196,9 +232,19 @@ export default function Calculator({
                 <div className="mt-1 text-center text-sm text-neutral-500">
                   Аннуитетный платёж
                 </div>
-                <div className="mt-5 text-center text-3xl font-bold text-neutral-900 sm:text-[32px]">
-                  <AnimatedNumber value={Math.round(result.monthlyPayment)} />
-                  &nbsp;₸
+                <div
+                  className={`mt-5 text-center text-3xl font-bold sm:text-[32px] ${
+                    isBelowMin ? "text-neutral-300" : "text-neutral-900"
+                  }`}
+                >
+                  {isBelowMin ? (
+                    "— ₸"
+                  ) : (
+                    <>
+                      <AnimatedNumber value={Math.round(result.monthlyPayment)} />
+                      &nbsp;₸
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -209,9 +255,19 @@ export default function Calculator({
                 <div className="mt-1 text-center text-sm text-neutral-500">
                   Срок {term} мес
                 </div>
-                <div className="mt-5 text-center text-3xl font-bold text-neutral-900 sm:text-[32px]">
-                  <AnimatedNumber value={Math.round(result.overpayment)} />
-                  &nbsp;₸
+                <div
+                  className={`mt-5 text-center text-3xl font-bold sm:text-[32px] ${
+                    isBelowMin ? "text-neutral-300" : "text-neutral-900"
+                  }`}
+                >
+                  {isBelowMin ? (
+                    "— ₸"
+                  ) : (
+                    <>
+                      <AnimatedNumber value={Math.round(result.overpayment)} />
+                      &nbsp;₸
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -219,8 +275,16 @@ export default function Calculator({
             {/* CTA + disclaimer */}
             <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
               <a
-                href="#form"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-brand-600 sm:w-auto"
+                href={isBelowMin ? undefined : "#form"}
+                aria-disabled={isBelowMin}
+                onClick={(e) => {
+                  if (isBelowMin) e.preventDefault();
+                }}
+                className={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-colors sm:w-auto ${
+                  isBelowMin
+                    ? "cursor-not-allowed bg-neutral-300"
+                    : "bg-brand-500 hover:bg-brand-600"
+                }`}
               >
                 Получить на этих условиях
                 <ArrowRight size={18} strokeWidth={2.5} />

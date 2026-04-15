@@ -72,6 +72,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
   const [renderStep, setRenderStep] = useState(0);
 
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     return () => {
@@ -90,10 +91,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
       setTimeout(() => {
         setRenderStep(nextStep);
         setStep(nextStep);
-        // Allow enter animation in next frame
-        requestAnimationFrame(() => {
-          setIsAnimating(false);
-        });
+        setIsAnimating(false);
       }, 200);
     },
     [step, isAnimating],
@@ -107,25 +105,20 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
     if (step > 0) animateToStep(step - 1);
   }, [step, animateToStep]);
 
-  const selectAmount = useCallback(
-    (value: string) => {
-      setAnswers((prev) => ({ ...prev, amount: value }));
-      autoAdvanceTimer.current = setTimeout(() => {
-        animateToStep(1);
-      }, 300);
-    },
-    [animateToStep],
-  );
+  const selectAmount = useCallback((value: string) => {
+    setAnswers((prev) => ({ ...prev, amount: value }));
+  }, []);
 
-  const selectUrgency = useCallback(
-    (value: string) => {
-      setAnswers((prev) => ({ ...prev, urgency: value }));
-      autoAdvanceTimer.current = setTimeout(() => {
-        animateToStep(2);
-      }, 300);
-    },
-    [animateToStep],
-  );
+  const selectUrgency = useCallback((value: string) => {
+    setAnswers((prev) => ({ ...prev, urgency: value }));
+  }, []);
+
+  const goNext = useCallback(() => {
+    if (step < TOTAL_STEPS - 1) animateToStep(step + 1);
+  }, [step, animateToStep]);
+
+  const canAdvance =
+    (step === 0 && !!answers.amount) || (step === 1 && !!answers.urgency);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -165,39 +158,43 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
   // --- Success state ---
   if (submitted) {
     return (
-      <Section bg="brand" id="form">
+      <Section bg="white" id="form">
         <Container>
-          <div className="mx-auto max-w-md text-center animate-[fadeIn_0.5s_ease]">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
-              <CheckCircle size={40} strokeWidth={1.5} className="text-white" />
-            </div>
-            <h2 className="mt-6 text-2xl font-bold sm:text-3xl">Заявка принята!</h2>
-
-            <div className="mt-8 space-y-4 text-left">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
-                  <Clock size={20} strokeWidth={1.8} className="text-white" />
-                </div>
-                <span className="text-brand-100">Перезвоним в ближайшее время</span>
+          <div className="mx-auto max-w-2xl">
+            <div className="rounded-3xl bg-gradient-to-b from-brand-50 to-brand-100/50 p-8 text-center ring-1 ring-brand-100 sm:p-12 animate-[fadeIn_0.5s_ease]">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-brand-500/10">
+                <CheckCircle size={40} strokeWidth={1.5} className="text-brand-500" />
               </div>
+              <h2 className="mt-6 text-2xl font-bold text-neutral-900 sm:text-3xl">
+                Заявка принята!
+              </h2>
 
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
-                  <Shield size={20} strokeWidth={1.8} className="text-white" />
+              <div className="mx-auto mt-8 max-w-sm space-y-4 text-left">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-brand-100">
+                    <Clock size={20} strokeWidth={1.8} className="text-brand-500" />
+                  </div>
+                  <span className="text-neutral-700">Перезвоним в ближайшее время</span>
                 </div>
-                <span className="text-brand-100">Ваши данные защищены</span>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
-                  <Phone size={20} strokeWidth={1.8} className="text-white" />
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-brand-100">
+                    <Shield size={20} strokeWidth={1.8} className="text-brand-500" />
+                  </div>
+                  <span className="text-neutral-700">Ваши данные защищены</span>
                 </div>
-                <a
-                  href="tel:+77073555565"
-                  className="text-white underline underline-offset-2 transition-opacity hover:opacity-80"
-                >
-                  +7 (707) 355-55-65
-                </a>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-brand-100">
+                    <Phone size={20} strokeWidth={1.8} className="text-brand-500" />
+                  </div>
+                  <a
+                    href="tel:+77073555565"
+                    className="text-neutral-900 underline underline-offset-2 transition-opacity hover:opacity-80"
+                  >
+                    +7 (707) 355-55-65
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -216,8 +213,10 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
     transform: isAnimating ? (renderStep === step ? exitTransform : enterFrom) : "translateX(0)",
   };
 
+  const progressPct = ((step + 1) / TOTAL_STEPS) * 100;
+
   return (
-    <Section bg="brand" id="form">
+    <Section bg="white" id="form">
       <Container>
         <AnimateOnScroll>
           <div className="mx-auto max-w-2xl">
@@ -230,158 +229,188 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
               </div>
             )}
 
-            {/* Progress dots */}
-            <div className="mb-8 flex items-center justify-center gap-2">
-              {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-                <div key={i} className="flex items-center gap-2">
+            <div className="rounded-3xl bg-gradient-to-b from-brand-50 to-brand-100/50 p-6 ring-1 ring-brand-100 sm:p-10">
+              {/* Header: progress bar + step counter */}
+              <div className="flex items-center gap-4">
+                <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/80">
                   <div
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      i === step
-                        ? "w-8 bg-white"
-                        : i < step
-                          ? "w-2.5 bg-white/70"
-                          : "w-2.5 bg-white/25"
-                    }`}
+                    className="h-full rounded-full bg-brand-500 transition-all duration-300"
+                    style={{ width: `${progressPct}%` }}
                   />
                 </div>
-              ))}
-            </div>
-
-            {/* Step title */}
-            <h2 className="mb-8 text-center text-2xl font-bold sm:text-3xl">
-              {STEP_TITLES[step]}
-            </h2>
-
-            {/* Steps container */}
-            <div style={stepStyle}>
-              {/* Step 0: Amount */}
-              {renderStep === 0 && (
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  {AMOUNT_OPTIONS.map((opt) => {
-                    const isSelected = answers.amount === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => selectAmount(opt.value)}
-                        className={`rounded-2xl p-6 text-center text-sm font-medium transition-all duration-200 sm:text-base ${
-                          isSelected
-                            ? "bg-white/20 ring-2 ring-white"
-                            : "bg-white/10 hover:bg-white/15"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
+                <div className="shrink-0 text-sm font-medium text-neutral-500">
+                  Шаг {step + 1} из {TOTAL_STEPS}
                 </div>
-              )}
-
-              {/* Step 1: Urgency */}
-              {renderStep === 1 && (
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-                  {URGENCY_OPTIONS.map((opt) => {
-                    const isSelected = answers.urgency === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => selectUrgency(opt.value)}
-                        className={`rounded-2xl p-6 text-center text-sm font-medium transition-all duration-200 sm:text-base ${
-                          isSelected
-                            ? "bg-white/20 ring-2 ring-white"
-                            : "bg-white/10 hover:bg-white/15"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Step 2: Contact form */}
-              {renderStep === 2 && (
-                <div className="mx-auto max-w-md">
-                  <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <label
-                          htmlFor="quiz-name"
-                          className="mb-1 block text-sm font-medium text-neutral-700"
-                        >
-                          Ваше имя
-                        </label>
-                        <input
-                          id="quiz-name"
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Введите имя"
-                          required
-                          className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-900 placeholder-neutral-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/20"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="quiz-phone"
-                          className="mb-1 block text-sm font-medium text-neutral-700"
-                        >
-                          Телефон
-                        </label>
-                        <input
-                          id="quiz-phone"
-                          type="tel"
-                          inputMode="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
-                          placeholder="+7 (___) ___-__-__"
-                          required
-                          className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-900 placeholder-neutral-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/20"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 py-3.5 font-semibold text-white transition-colors hover:bg-brand-600 disabled:opacity-70"
-                      >
-                        {loading ? (
-                          <>
-                            <Loader2 size={20} className="animate-spin" />
-                            Отправка...
-                          </>
-                        ) : (
-                          <>
-                            Получить предложение
-                            <ArrowRight size={18} strokeWidth={2} />
-                          </>
-                        )}
-                      </button>
-
-                      <p className="text-center text-xs text-neutral-400">
-                        Нажимая кнопку, вы даёте согласие на обработку персональных данных
-                      </p>
-                    </form>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Back button */}
-            {step > 0 && !isAnimating && (
-              <div className="mt-6 text-center">
-                <button
-                  type="button"
-                  onClick={goBack}
-                  className="inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white"
-                >
-                  <ArrowLeft size={16} strokeWidth={1.8} />
-                  Назад
-                </button>
               </div>
-            )}
+
+              {/* Step title */}
+              <h2 className="mt-8 max-w-md text-2xl font-bold text-neutral-900 sm:text-[28px] sm:leading-tight">
+                {STEP_TITLES[step]}
+              </h2>
+
+              {/* Steps container */}
+              <div className="mt-8" style={stepStyle}>
+                {/* Step 0: Amount */}
+                {renderStep === 0 && (
+                  <div className="space-y-3">
+                    {AMOUNT_OPTIONS.map((opt) => {
+                      const isSelected = answers.amount === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => selectAmount(opt.value)}
+                          className={`flex w-full items-center gap-4 rounded-2xl bg-white px-5 py-4 text-left transition-all ${
+                            isSelected
+                              ? "ring-2 ring-brand-500"
+                              : "ring-1 ring-transparent hover:ring-brand-200"
+                          }`}
+                        >
+                          <span
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                              isSelected ? "border-brand-500" : "border-neutral-300"
+                            }`}
+                          >
+                            {isSelected && (
+                              <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
+                            )}
+                          </span>
+                          <span className="text-base font-medium text-neutral-900">
+                            {opt.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Step 1: Urgency */}
+                {renderStep === 1 && (
+                  <div className="space-y-3">
+                    {URGENCY_OPTIONS.map((opt) => {
+                      const isSelected = answers.urgency === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => selectUrgency(opt.value)}
+                          className={`flex w-full items-center gap-4 rounded-2xl bg-white px-5 py-4 text-left transition-all ${
+                            isSelected
+                              ? "ring-2 ring-brand-500"
+                              : "ring-1 ring-transparent hover:ring-brand-200"
+                          }`}
+                        >
+                          <span
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                              isSelected ? "border-brand-500" : "border-neutral-300"
+                            }`}
+                          >
+                            {isSelected && (
+                              <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
+                            )}
+                          </span>
+                          <span className="text-base font-medium text-neutral-900">
+                            {opt.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Step 2: Contact form */}
+                {renderStep === 2 && (
+                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                    <div className="rounded-2xl bg-white p-5">
+                      <label
+                        htmlFor="quiz-name"
+                        className="block text-xs font-medium text-neutral-500"
+                      >
+                        Ваше имя
+                      </label>
+                      <input
+                        id="quiz-name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Введите имя"
+                        required
+                        className="mt-1 w-full border-0 bg-transparent p-0 text-base font-medium text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-0"
+                      />
+                    </div>
+
+                    <div className="rounded-2xl bg-white p-5">
+                      <label
+                        htmlFor="quiz-phone"
+                        className="block text-xs font-medium text-neutral-500"
+                      >
+                        Телефон
+                      </label>
+                      <input
+                        id="quiz-phone"
+                        type="tel"
+                        inputMode="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
+                        placeholder="+7 (___) ___-__-__"
+                        required
+                        className="mt-1 w-full border-0 bg-transparent p-0 text-base font-medium text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-0"
+                      />
+                    </div>
+
+                    <p className="text-xs text-neutral-500">
+                      Нажимая кнопку, вы даёте согласие на обработку персональных данных
+                    </p>
+                  </form>
+                )}
+              </div>
+
+              {/* Footer: Back + Next/Submit */}
+              <div className="mt-8 flex items-center justify-between gap-4">
+                {step > 0 ? (
+                  <button
+                    type="button"
+                    onClick={goBack}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 transition-colors hover:text-neutral-900"
+                  >
+                    <ArrowLeft size={16} strokeWidth={2} />
+                    Назад
+                  </button>
+                ) : (
+                  <span />
+                )}
+
+                {step < TOTAL_STEPS - 1 ? (
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    disabled={!canAdvance}
+                    className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Далее
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => formRef.current?.requestSubmit()}
+                    disabled={loading || !name || !phone}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 size={18} className="animate-spin" />
+                        Отправка...
+                      </>
+                    ) : (
+                      <>
+                        Получить предложение
+                        <ArrowRight size={18} strokeWidth={2} />
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </AnimateOnScroll>
       </Container>

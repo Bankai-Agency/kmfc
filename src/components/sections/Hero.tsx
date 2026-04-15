@@ -71,16 +71,18 @@ export default function Hero({ data, collateralImageLabel, collateralImage }: He
             </div>
 
             {/* Stats bar */}
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {data.stats.map((stat) => (
+            <div className="mt-10 grid grid-cols-3 gap-3">
+              {data.stats.map((stat, i) => (
                 <div
-                  key={stat.label}
+                  key={i}
                   className="flex flex-col items-center justify-center rounded-xl bg-white/10 px-2 py-4 text-center backdrop-blur-sm"
                 >
-                  <div className="text-xl font-bold leading-tight sm:text-2xl">
+                  <div className="whitespace-pre-line text-base font-bold leading-tight sm:text-lg">
                     {stat.value}
                   </div>
-                  <div className="mt-1 text-xs text-white/50">{stat.label}</div>
+                  {stat.label && (
+                    <div className="mt-1 text-xs text-white/50">{stat.label}</div>
+                  )}
                 </div>
               ))}
             </div>
