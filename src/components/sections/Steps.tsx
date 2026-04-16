@@ -13,7 +13,7 @@ export default function Steps({ data }: { data: Step[] }) {
     <section className="bg-neutral-50 py-16 sm:py-20">
       <Container>
         <AnimateOnScroll>
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Как получить кредит</h2>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Как получить финансирование</h2>
           <p className="mt-2 text-center text-neutral-500">
             Решение за 1 час, деньги — в день регистрации залога
           </p>

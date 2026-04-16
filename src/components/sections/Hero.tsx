@@ -66,7 +66,7 @@ export default function Hero({ data, collateralImageLabel, collateralImage }: He
                 className="inline-flex items-center gap-2 rounded-xl border-2 border-white/20 px-6 py-3.5 font-semibold transition-colors hover:bg-white/10"
               >
                 <Calculator size={18} strokeWidth={2} />
-                Рассчитать кредит
+                Рассчитать платёж
               </a>
             </div>
 

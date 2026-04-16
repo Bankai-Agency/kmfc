@@ -6,7 +6,7 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 const GUARANTEES = [
   { icon: Clock, title: "Решение за 1 час", description: "Оперативно принимаем решение, чтобы ваш бизнес не простаивал" },
-  { icon: Shield, title: "Имущество в безопасности", description: "Вы продолжаете пользоваться залогом весь срок кредита" },
+  { icon: Shield, title: "Имущество в безопасности", description: "Вы продолжаете пользоваться залогом весь срок договора" },
   { icon: FileCheck, title: "Прозрачный договор", description: "Все условия фиксируются до подписания — никаких сюрпризов" },
   { icon: Lock, title: "Защита данных", description: "Персональные данные защищены по Закону РК" },
 ];

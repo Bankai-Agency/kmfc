@@ -58,7 +58,7 @@ export default function Conditions({ data }: { data: ConditionsData }) {
     <Section bg="gray">
       <Container>
         <AnimateOnScroll>
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Условия кредитования</h2>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Условия финансирования</h2>
           <div className="mt-2 flex items-center justify-center gap-2 text-sm text-neutral-500">
             <MapPin size={14} strokeWidth={2} className="text-brand-500" />
             Работаем в Алматы и Актобе
@@ -81,7 +81,7 @@ export default function Conditions({ data }: { data: ConditionsData }) {
                   <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center">
                     <img
                       src="/images/conditions-amount.png"
-                      alt="Сумма кредита"
+                      alt="Сумма финансирования"
                       className="max-h-[68%] max-w-none object-contain drop-shadow-lg"
                     />
                   </div>

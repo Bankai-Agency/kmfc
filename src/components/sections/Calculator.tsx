@@ -121,7 +121,7 @@ export default function Calculator({
         <AnimateOnScroll>
           <div className="rounded-3xl bg-white p-6 ring-1 ring-neutral-100 sm:p-10 lg:p-12">
             <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl">
-              Рассчитайте платёж по кредиту
+              Рассчитайте платёж
             </h2>
 
             {/* Top grid: inputs (left) + info (right) */}
@@ -130,7 +130,7 @@ export default function Calculator({
               <div className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-neutral-600">
-                    Срок кредита
+                    Срок финансирования
                   </label>
                   <div className="relative mt-2">
                     <select
@@ -162,7 +162,7 @@ export default function Calculator({
 
                 <div>
                   <label className="block text-sm font-medium text-neutral-600">
-                    Сумма кредита
+                    Сумма финансирования
                   </label>
                   <div className="relative mt-2">
                     <input

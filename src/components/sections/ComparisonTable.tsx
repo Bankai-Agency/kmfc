@@ -18,7 +18,7 @@ const COMPARISON_DATA: ComparisonRow[] = [
   { feature: "Срок рассмотрения", kmfc: "1 день", banks: "5-14 дней", mfo: "1-3 дня" },
   { feature: "Максимальная сумма", kmfc: "до 30 млн ₸", banks: "до 100 млн ₸", mfo: "до 5 млн ₸" },
   { feature: "Минимум документов", kmfc: "2 документа", banks: "5-8 документов", mfo: "2-3 документа" },
-  { feature: "Любая кредитная история", kmfc: true, banks: false, mfo: true },
+  { feature: "Любая финансовая история", kmfc: true, banks: false, mfo: true },
   { feature: "Прозрачные условия", kmfc: true, banks: true, mfo: false },
   { feature: "Досрочное погашение без штрафов", kmfc: true, banks: true, mfo: false },
   { feature: "Имущество остаётся у вас", kmfc: true, banks: true, mfo: true },
@@ -90,7 +90,7 @@ export default function ComparisonTable() {
 
           <p className="mx-auto mt-4 max-w-4xl text-center text-xs text-neutral-400">
             Данные актуальны на {new Date().toLocaleDateString("ru-RU", { month: "long", year: "numeric" })}.
-            Условия банков и МФО могут отличаться в зависимости от программы кредитования.
+            Условия банков и МФО могут отличаться в зависимости от программы финансирования.
           </p>
         </AnimateOnScroll>
       </Container>

@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Products */}
           <div>
             <div className="text-sm font-semibold uppercase tracking-wider text-neutral-500">
-              Кредиты
+              Финансирование
             </div>
             <ul className="mt-3 space-y-2">
               {COLLATERAL_CARDS.map((card) => (

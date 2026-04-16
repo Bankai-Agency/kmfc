@@ -14,7 +14,7 @@ const SEGMENTS = [
     items: [
       "Крупные покупки и ремонт",
       "Образование и лечение",
-      "Рефинансирование дорогих кредитов",
+      "Рефинансирование дорогих займов",
       "Срочные финансовые потребности",
     ],
   },
@@ -36,10 +36,10 @@ const SEGMENTS = [
     image: "/images/forwhom-refinansirovanie.png",
     imageAlt: "Подписание документов",
     items: [
-      "Объединение нескольких кредитов",
+      "Объединение нескольких займов",
       "Снижение ежемесячного платежа",
       "Более выгодная процентная ставка",
-      "Улучшение кредитной истории",
+      "Улучшение финансовой истории",
     ],
   },
 ];
@@ -49,7 +49,7 @@ export default function ForWhom() {
     <Section bg="gray">
       <Container>
         <AnimateOnScroll>
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Кому подойдёт кредит</h2>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Кому подойдёт финансирование</h2>
           <p className="mt-2 text-center text-neutral-500">Финансирование для любых целей под залог вашего имущества</p>
         </AnimateOnScroll>
 

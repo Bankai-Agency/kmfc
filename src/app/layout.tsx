@@ -10,12 +10,12 @@ import SocialProofToast from "@/components/widgets/SocialProofToast";
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
-  title: "KMFC — Кредиты под залог имущества в Алматы и Актобе",
-  description: "Кредиты под залог недвижимости, авто, земли и спецтехники в Алматы и Актобе. Одобрение за 1 день, выгодные ставки, лицензия НБ РК.",
+  title: "KMFC — Деньги на развитие бизнеса под залог имущества в Алматы и Актобе",
+  description: "Финансирование под залог недвижимости, авто, земли и спецтехники в Алматы и Актобе. Одобрение за 1 день, выгодные ставки, лицензия АРРФР.",
   robots: "noindex, nofollow",
   openGraph: {
-    title: "KMFC — Кредиты под залог имущества",
-    description: "Одобрение за 1 день. До 30 млн ₸ под залог недвижимости, авто, земли. Лицензия НБ РК.",
+    title: "KMFC — Деньги на развитие бизнеса под залог имущества",
+    description: "Одобрение за 1 день. До 86 млн ₸ под залог недвижимости, авто, земли. Лицензия АРРФР.",
     type: "website",
     locale: "ru_KZ",
     siteName: "KMFC",
@@ -26,7 +26,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "FinancialService",
   name: "KMFC — Казахстанская Микрофинансовая Компания",
-  description: "Кредиты под залог имущества в Алматы и Актобе. Одобрение за 1 день.",
+  description: "Финансирование под залог имущества в Алматы и Актобе. Одобрение за 1 день.",
   telephone: "+7-727-355-55-65",
   address: [
     {
@@ -46,12 +46,12 @@ const jsonLd = {
   ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "Кредиты под залог",
+    name: "Финансирование под залог",
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Кредит под залог недвижимости", currency: "KZT" } },
-      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Кредит под залог автомобиля", currency: "KZT" } },
-      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Кредит под залог земельного участка", currency: "KZT" } },
-      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Кредит под залог спецтехники", currency: "KZT" } },
+      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Микрокредит под залог недвижимости", currency: "KZT" } },
+      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Микрокредит под залог автомобиля", currency: "KZT" } },
+      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Микрокредит под залог земельного участка", currency: "KZT" } },
+      { "@type": "Offer", itemOffered: { "@type": "LoanOrCredit", name: "Микрокредит под залог спецтехники", currency: "KZT" } },
     ],
   },
 };
