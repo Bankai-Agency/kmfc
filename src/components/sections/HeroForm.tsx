@@ -65,7 +65,7 @@ export default function HeroForm({ collateralType }: { collateralType: Collatera
             </div>
           ) : (
             <>
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
                 {/* Left: heading */}
                 <div className="shrink-0">
                   <h3 className="text-lg font-bold text-white sm:text-xl">Узнайте свои условия</h3>
