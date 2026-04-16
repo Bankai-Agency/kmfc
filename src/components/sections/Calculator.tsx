@@ -246,25 +246,27 @@ export default function Calculator({
             </div>
 
             {/* Result tiles */}
-            <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
-              <div className="text-sm text-neutral-500">Ежемесячный платёж</div>
-              <div
-                className={`mt-2 text-3xl font-bold sm:text-[36px] ${
-                  isBelowMin ? "text-neutral-300" : "text-brand-600"
-                }`}
-              >
-                {isBelowMin ? (
-                  "— ₸"
-                ) : (
-                  <>
-                    <AnimatedNumber value={Math.round(result.monthlyPayment)} />
-                    &nbsp;₸
-                  </>
-                )}
+            <div className="mt-6 flex flex-wrap items-baseline gap-x-8 gap-y-2 rounded-2xl border border-neutral-200 bg-white px-6 py-4">
+              <div>
+                <div className="text-xs text-neutral-500">Ежемесячный платёж</div>
+                <div
+                  className={`mt-0.5 text-2xl font-bold sm:text-3xl ${
+                    isBelowMin ? "text-neutral-300" : "text-brand-600"
+                  }`}
+                >
+                  {isBelowMin ? (
+                    "— ₸"
+                  ) : (
+                    <>
+                      <AnimatedNumber value={Math.round(result.monthlyPayment)} />
+                      &nbsp;₸
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-400">
+              <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-400">
                 <span>
-                  Сумма кредита:{" "}
+                  Сумма:{" "}
                   <span className={isBelowMin ? "text-neutral-300" : "text-neutral-600"}>
                     {isBelowMin ? "—" : formatNumber(amount)} ₸
                   </span>

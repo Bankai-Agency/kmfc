@@ -260,10 +260,10 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                           key={opt.value}
                           type="button"
                           onClick={() => selectAmount(opt.value)}
-                          className={`flex w-full items-center gap-4 rounded-2xl bg-white px-5 py-4 text-left transition-all ${
+                          className={`flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left transition-all ${
                             isSelected
-                              ? "ring-2 ring-brand-500"
-                              : "ring-1 ring-transparent hover:ring-brand-200"
+                              ? "bg-brand-50 ring-2 ring-brand-500"
+                              : "bg-neutral-50 hover:ring-1 hover:ring-brand-200"
                           }`}
                         >
                           <span
@@ -294,10 +294,10 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                           key={opt.value}
                           type="button"
                           onClick={() => selectUrgency(opt.value)}
-                          className={`flex w-full items-center gap-4 rounded-2xl bg-white px-5 py-4 text-left transition-all ${
+                          className={`flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left transition-all ${
                             isSelected
-                              ? "ring-2 ring-brand-500"
-                              : "ring-1 ring-transparent hover:ring-brand-200"
+                              ? "bg-brand-50 ring-2 ring-brand-500"
+                              : "bg-neutral-50 hover:ring-1 hover:ring-brand-200"
                           }`}
                         >
                           <span
@@ -321,7 +321,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                 {/* Step 2: Contact form */}
                 {renderStep === 2 && (
                   <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-                    <div className="rounded-2xl bg-white p-5">
+                    <div className="rounded-2xl bg-neutral-50 p-5">
                       <label
                         htmlFor="quiz-name"
                         className="block text-xs font-medium text-neutral-500"
@@ -339,7 +339,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
                       />
                     </div>
 
-                    <div className="rounded-2xl bg-white p-5">
+                    <div className="rounded-2xl bg-neutral-50 p-5">
                       <label
                         htmlFor="quiz-phone"
                         className="block text-xs font-medium text-neutral-500"
