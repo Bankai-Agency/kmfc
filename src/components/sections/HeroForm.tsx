@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Loader2, CheckCircle, Phone, Shield } from "lucide-react";
+import { Loader2, CheckCircle, Phone } from "lucide-react";
 import { CollateralType } from "@/lib/types";
 import { CONTACT_INFO } from "@/lib/data";
 import { formatPhoneKz, stripPhoneToDigits } from "@/lib/phone";
