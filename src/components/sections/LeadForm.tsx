@@ -14,7 +14,6 @@ import { CollateralType } from "@/lib/types";
 import { PAGES_DATA } from "@/lib/data";
 import { formatPhoneKz, stripPhoneToDigits } from "@/lib/phone";
 import Container from "@/components/ui/Container";
-import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 interface LeadFormProps {
@@ -158,9 +157,9 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
   // --- Success state ---
   if (submitted) {
     return (
-      <Section bg="white" id="form">
+      <section id="form" className="bg-[rgba(179,238,245,0.5)] pb-16 pt-10 sm:pb-20 sm:pt-12">
         <Container>
-          <div className="mx-auto max-w-2xl">
+          <div>
             <div className="rounded-3xl bg-gradient-to-b from-brand-50 to-brand-100/50 p-8 text-center ring-1 ring-brand-100 sm:p-12 animate-[fadeIn_0.5s_ease]">
               <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-brand-500/10">
                 <CheckCircle size={40} strokeWidth={1.5} className="text-brand-500" />
@@ -199,7 +198,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
             </div>
           </div>
         </Container>
-      </Section>
+      </section>
     );
   }
 
@@ -216,10 +215,10 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
   const progressPct = ((step + 1) / TOTAL_STEPS) * 100;
 
   return (
-    <Section bg="white" id="form" className="bg-gradient-to-b from-brand-50 to-brand-100/50">
+    <section id="form" className="bg-[rgba(179,238,245,0.5)] pb-16 pt-10 sm:pb-20 sm:pt-12">
       <Container>
         <AnimateOnScroll>
-          <div className="mx-auto max-w-2xl">
+          <div>
             {/* Offer badge — показываем только если в data.ts задан hero.offer */}
             {offerBadge && (
               <div className="mb-6 text-center">
@@ -414,6 +413,6 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
           </div>
         </AnimateOnScroll>
       </Container>
-    </Section>
+    </section>
   );
 }

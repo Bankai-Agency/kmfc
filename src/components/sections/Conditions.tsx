@@ -43,12 +43,12 @@ function ValueLabel({
     <div className={align === "center" ? "text-center" : "text-left"}>
       <div
         className={`font-bold leading-[1.15] tracking-tight text-neutral-900 ${
-          size === "lg" ? "text-[26px] sm:text-3xl" : "text-2xl sm:text-[26px]"
+          size === "lg" ? "text-[28px] sm:text-[34px]" : "text-[26px] sm:text-[30px]"
         }`}
       >
         {nbspNumbers(value)}
       </div>
-      <div className="mt-2 text-sm text-neutral-500">{label}</div>
+      <div className="mt-2 text-base text-neutral-500">{label}</div>
     </div>
   );
 }
@@ -65,7 +65,7 @@ export default function Conditions({ data }: { data: ConditionsData }) {
           </div>
         </AnimateOnScroll>
 
-        <div className="mt-10 grid auto-rows-[minmax(160px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[160px] lg:grid-cols-3">
           {data.items.map((item, i) => (
             <AnimateOnScroll
               key={item.label}
@@ -74,18 +74,18 @@ export default function Conditions({ data }: { data: ConditionsData }) {
             >
               {/* Big: vertical, image top + text bottom */}
               {i === 0 && (
-                <div className={`${CARD_BASE} flex flex-col justify-end`}>
+                <div className={`${CARD_BASE} flex flex-col`}>
                   {/* Blur circle */}
                   <div className="absolute left-[12%] top-[-30%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
                   {/* Illustration */}
-                  <div className="absolute inset-x-0 top-4 flex h-[55%] items-center justify-center">
+                  <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center">
                     <img
                       src="/images/conditions-amount.png"
                       alt="Сумма кредита"
-                      className="h-full max-w-none object-contain drop-shadow-lg"
+                      className="max-h-[68%] max-w-none object-contain drop-shadow-lg"
                     />
                   </div>
-                  <div className="relative z-10 pt-6">
+                  <div className="relative z-10 shrink-0 pb-2">
                     <ValueLabel value={item.value} label={item.label} size="lg" />
                   </div>
                 </div>
@@ -93,18 +93,18 @@ export default function Conditions({ data }: { data: ConditionsData }) {
 
               {/* Tall middle: vertical, image top + text bottom */}
               {i === 1 && (
-                <div className={`${CARD_BASE} flex flex-col justify-end`}>
+                <div className={`${CARD_BASE} flex flex-col`}>
                   {/* Blur circle */}
                   <div className="absolute left-[12%] top-[-30%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
                   {/* Illustration */}
-                  <div className="absolute inset-x-0 top-4 flex h-[65%] items-center justify-center">
+                  <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center">
                     <img
                       src="/images/conditions-rate.png"
                       alt="Процентная ставка"
-                      className="h-full max-w-none object-contain drop-shadow-lg"
+                      className="max-h-[93%] max-w-none object-contain drop-shadow-lg"
                     />
                   </div>
-                  <div className="relative z-10 pt-6">
+                  <div className="relative z-10 shrink-0 pb-2">
                     <ValueLabel value={item.value} label={item.label} size="lg" />
                   </div>
                 </div>

@@ -4,14 +4,13 @@ import { ArrowRight } from "lucide-react";
 import { CollateralType } from "@/lib/types";
 import { COLLATERAL_CARDS } from "@/lib/data";
 import Container from "@/components/ui/Container";
-import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
 
 export default function OtherCollateral({ current }: { current: CollateralType }) {
   const others = COLLATERAL_CARDS.filter((c) => c.slug !== current);
 
   return (
-    <Section bg="white">
+    <section className="bg-gradient-to-b from-brand-50 to-brand-100/50 pb-0 pt-16 sm:pt-20">
       <Container>
         <AnimateOnScroll>
           <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl">
@@ -23,7 +22,7 @@ export default function OtherCollateral({ current }: { current: CollateralType }
             <AnimateOnScroll key={card.slug} delay={i * 0.1} className="h-full">
               <a
                 href={`/${card.slug}`}
-                className="group flex h-full items-center gap-4 rounded-2xl bg-brand-50 px-6 py-5 transition-colors hover:bg-brand-100/70"
+                className="group flex h-full items-center gap-4 rounded-2xl bg-white px-6 py-5 transition-colors hover:bg-neutral-50"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
                   <card.icon
@@ -45,6 +44,6 @@ export default function OtherCollateral({ current }: { current: CollateralType }
           ))}
         </div>
       </Container>
-    </Section>
+    </section>
   );
 }

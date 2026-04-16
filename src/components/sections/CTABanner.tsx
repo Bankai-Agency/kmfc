@@ -58,7 +58,7 @@ export default function CTABanner({
               <img
                 src="/images/cta-illustration.png"
                 alt="Иллюстрация"
-                className="h-auto w-full max-w-none object-contain drop-shadow-2xl md:-my-8 md:-ml-12 md:w-[110%] md:max-w-[560px]"
+                className="h-auto w-full max-w-none object-contain drop-shadow-2xl md:-my-8 md:-ml-24 md:w-[110%] md:max-w-[560px]"
               />
             </div>
           </div>

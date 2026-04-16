@@ -44,70 +44,75 @@ export default function HeroForm({ collateralType }: { collateralType: Collatera
   }
 
   return (
-    <section className="bg-neutral-800 py-8 text-white sm:py-10">
+    <section className="bg-neutral-50 py-4 sm:py-6">
       <Container>
-        {submitted ? (
-          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-6 sm:text-left">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-500/20">
-              <CheckCircle size={24} strokeWidth={2} className="text-green-400" />
+        <div className="rounded-2xl bg-neutral-900 px-6 py-6 sm:px-8 sm:py-7">
+          {submitted ? (
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-6 sm:text-left">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-500/10">
+                <CheckCircle size={24} strokeWidth={2} className="text-green-600" />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-neutral-900">Заявка принята — перезвоним за 15 минут</p>
+                <a
+                  href={`tel:${CONTACT_INFO.phones[0].replace(/[^+\d]/g, "")}`}
+                  className="mt-1 inline-flex items-center gap-1.5 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
+                >
+                  <Phone size={14} strokeWidth={2} />
+                  Или позвоните сами: {CONTACT_INFO.phones[0]}
+                </a>
+              </div>
             </div>
-            <div>
-              <p className="text-lg font-bold">Заявка принята — перезвоним за 15 минут</p>
-              <a
-                href={`tel:${CONTACT_INFO.phones[0].replace(/[^+\d]/g, "")}`}
-                className="mt-1 inline-flex items-center gap-1.5 text-sm text-white/60 transition-colors hover:text-white"
-              >
-                <Phone size={14} strokeWidth={2} />
-                Или позвоните сами: {CONTACT_INFO.phones[0]}
-              </a>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-            {/* Left: short trust line (without "Получите решение за 15 минут") */}
-            <div className="shrink-0">
-              <p className="flex items-center gap-1.5 text-sm text-white/70">
-                <Shield size={14} strokeWidth={2} className="shrink-0" />
-                Бесплатно, без обязательств. Данные защищены.
-              </p>
-            </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+                {/* Left: heading */}
+                <div className="shrink-0">
+                  <h3 className="text-lg font-bold text-white sm:text-xl">Узнайте свои условия</h3>
+                  <p className="mt-1 max-w-sm text-sm text-white/60">
+                    Оставьте номер — перезвоним и&nbsp;рассчитаем персональное предложение
+                  </p>
+                </div>
 
-            {/* Right: inline form */}
-            <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:max-w-xl">
-              <input
-                type="text"
-                name="name"
-                placeholder="Ваше имя"
-                required
-                className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400 sm:w-auto sm:flex-1"
-              />
-              <input
-                type="tel"
-                name="phone"
-                inputMode="tel"
-                placeholder="+7 (___) ___-__-__"
-                value={phone}
-                onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
-                required
-                className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400 sm:w-auto sm:flex-1"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-600 disabled:opacity-70"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Отправка...
-                  </>
-                ) : (
-                  "Получить консультацию"
-                )}
-              </button>
-            </form>
-          </div>
-        )}
+                {/* Right: form */}
+                <div className="w-full lg:max-w-md">
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                    <div className="flex-1">
+                      <label className="mb-1 block text-xs font-medium text-white/50">Телефон</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        inputMode="tel"
+                        placeholder="+7 (000) 000-00-00"
+                        value={phone}
+                        onChange={(e) => setPhone(formatPhoneKz(e.target.value))}
+                        required
+                        className="w-full rounded-xl border-0 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/40 transition-colors focus:outline-none focus:ring-1 focus:ring-brand-400/30"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-600 disabled:opacity-70"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          Отправка...
+                        </>
+                      ) : (
+                        "Отправить заявку"
+                      )}
+                    </button>
+                  </form>
+                  <p className="mt-3 text-xs text-white/40">
+                    Нажимая на кнопку, я даю своё согласие на взаимодействие и&nbsp;обработку персональных данных
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </Container>
     </section>
   );
