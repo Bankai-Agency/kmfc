@@ -229,7 +229,7 @@ export default function LeadForm({ collateralType }: LeadFormProps) {
               </div>
             )}
 
-            <div className="rounded-3xl bg-white/60 p-6 ring-1 ring-white/80 backdrop-blur-sm sm:p-10">
+            <div className="rounded-3xl bg-white p-6 ring-1 ring-neutral-100 sm:p-10">
               {/* Header: progress bar + step counter */}
               <div className="flex items-center gap-4">
                 <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/80">

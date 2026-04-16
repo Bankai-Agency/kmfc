@@ -11,13 +11,13 @@ const CARD_STYLE =
 const CARD_BASE = `${CARD_STYLE} overflow-hidden`;
 
 // Bento placement:
-// item 0 — big left (col 1, rows 1-2)
-// item 1 — wide top-right (cols 2-3, row 1)
-// item 2 — small bottom-right 1 (col 2, row 2)
-// item 3 — small bottom-right 2 (col 3, row 2)
+// item 0 — tall left (col 1, rows 1-2)
+// item 1 — tall middle (col 2, rows 1-2)
+// item 2 — small top-right (col 3, row 1)
+// item 3 — small bottom-right (col 3, row 2)
 const BENTO_CLASSES = [
   "lg:col-span-1 lg:row-span-2",
-  "lg:col-span-2",
+  "lg:col-span-1 lg:row-span-2",
   "lg:col-span-1",
   "lg:col-span-1",
 ];
@@ -78,7 +78,7 @@ export default function Conditions({ data }: { data: ConditionsData }) {
                   {/* Blur circle */}
                   <div className="absolute left-[12%] top-[-30%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
                   {/* Illustration */}
-                  <div className="absolute inset-x-0 top-4 flex h-[65%] items-center justify-end -right-2">
+                  <div className="absolute inset-x-0 top-4 flex h-[55%] items-center justify-center">
                     <img
                       src="/images/conditions-amount.png"
                       alt="Сумма кредита"
@@ -91,21 +91,21 @@ export default function Conditions({ data }: { data: ConditionsData }) {
                 </div>
               )}
 
-              {/* Wide: horizontal, text left + image right */}
+              {/* Tall middle: vertical, image top + text bottom */}
               {i === 1 && (
-                <div className={`${CARD_BASE} flex items-center`}>
+                <div className={`${CARD_BASE} flex flex-col justify-end`}>
                   {/* Blur circle */}
-                  <div className="absolute right-[10%] top-[-40%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
-                  <div className="relative z-10 flex-1">
-                    <ValueLabel value={item.value} label={item.label} size="md" align="left" />
-                  </div>
-                  {/* Rotated illustration */}
-                  <div className="absolute -right-4 top-1/2 flex h-[200%] w-[45%] -translate-y-1/2 items-center justify-center">
+                  <div className="absolute left-[12%] top-[-30%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
+                  {/* Illustration */}
+                  <div className="absolute inset-x-0 top-4 flex h-[65%] items-center justify-center">
                     <img
                       src="/images/conditions-rate.png"
                       alt="Процентная ставка"
-                      className="w-full max-w-none object-contain drop-shadow-lg"
+                      className="h-full max-w-none object-contain drop-shadow-lg"
                     />
+                  </div>
+                  <div className="relative z-10 pt-6">
+                    <ValueLabel value={item.value} label={item.label} size="lg" />
                   </div>
                 </div>
               )}

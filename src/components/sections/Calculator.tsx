@@ -246,51 +246,42 @@ export default function Calculator({
             </div>
 
             {/* Result tiles */}
-            <div className="mt-6 grid gap-4 lg:grid-cols-2">
-              <div className="rounded-2xl bg-brand-50 p-6 sm:p-7">
-                <div className="text-center text-base font-semibold text-neutral-900">
-                  Ежемесячный платёж
-                </div>
-                <div className="mt-1 text-center text-sm text-neutral-500">
-                  Аннуитетный платёж
-                </div>
-                <div
-                  className={`mt-5 text-center text-3xl font-bold sm:text-[32px] ${
-                    isBelowMin ? "text-neutral-300" : "text-neutral-900"
-                  }`}
-                >
-                  {isBelowMin ? (
-                    "— ₸"
-                  ) : (
-                    <>
-                      <AnimatedNumber value={Math.round(result.monthlyPayment)} />
-                      &nbsp;₸
-                    </>
-                  )}
-                </div>
+            <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+              <div className="text-sm text-neutral-500">Ежемесячный платёж</div>
+              <div
+                className={`mt-2 text-3xl font-bold sm:text-[36px] ${
+                  isBelowMin ? "text-neutral-300" : "text-brand-600"
+                }`}
+              >
+                {isBelowMin ? (
+                  "— ₸"
+                ) : (
+                  <>
+                    <AnimatedNumber value={Math.round(result.monthlyPayment)} />
+                    &nbsp;₸
+                  </>
+                )}
               </div>
-
-              <div className="rounded-2xl bg-neutral-50 p-6 sm:p-7">
-                <div className="text-center text-base font-semibold text-neutral-900">
-                  Переплата за весь срок
-                </div>
-                <div className="mt-1 text-center text-sm text-neutral-500">
-                  Срок {term} мес
-                </div>
-                <div
-                  className={`mt-5 text-center text-3xl font-bold sm:text-[32px] ${
-                    isBelowMin ? "text-neutral-300" : "text-neutral-900"
-                  }`}
-                >
-                  {isBelowMin ? (
-                    "— ₸"
-                  ) : (
-                    <>
-                      <AnimatedNumber value={Math.round(result.overpayment)} />
-                      &nbsp;₸
-                    </>
-                  )}
-                </div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-400">
+                <span>
+                  Сумма кредита:{" "}
+                  <span className={isBelowMin ? "text-neutral-300" : "text-neutral-600"}>
+                    {isBelowMin ? "—" : formatNumber(amount)} ₸
+                  </span>
+                </span>
+                <span>
+                  Переплата:{" "}
+                  <span className={isBelowMin ? "text-neutral-300" : "text-neutral-600"}>
+                    {isBelowMin ? (
+                      "—"
+                    ) : (
+                      <>{formatNumber(Math.round(result.overpayment))} ₸</>
+                    )}
+                  </span>
+                </span>
+                <span>
+                  Срок: <span className="text-neutral-600">{term} мес</span>
+                </span>
               </div>
             </div>
 
