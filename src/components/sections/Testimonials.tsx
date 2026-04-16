@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
@@ -74,23 +74,72 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+const PER_PAGE = 2;
+const TOTAL_PAGES = Math.ceil(TESTIMONIALS.length / PER_PAGE);
+
+function TestimonialCard({ t }: { t: Testimonial }) {
+  return (
+    <div className="relative flex h-full flex-col rounded-2xl bg-white p-6 sm:p-8">
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
+          {t.initials}
+        </div>
+        <div>
+          <div className="font-semibold text-neutral-800">{t.name}</div>
+          <div className="text-sm text-neutral-500">
+            {t.city} &middot; {t.purpose}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            size={16}
+            strokeWidth={1.5}
+            className={i < t.rating ? "fill-accent-400 text-accent-400" : "text-neutral-300"}
+          />
+        ))}
+      </div>
+
+      <blockquote className="mt-3 flex-1 leading-relaxed text-neutral-700">
+        &ldquo;{t.text}&rdquo;
+      </blockquote>
+    </div>
+  );
+}
+
 export default function Testimonials() {
-  const [current, setCurrent] = useState(0);
+  const [page, setPage] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const next = useCallback(() => {
-    setCurrent((c) => (c === TESTIMONIALS.length - 1 ? 0 : c + 1));
+    setPage((p) => (p >= TOTAL_PAGES - 1 ? 0 : p + 1));
   }, []);
 
   const prev = useCallback(() => {
-    setCurrent((c) => (c === 0 ? TESTIMONIALS.length - 1 : c - 1));
+    setPage((p) => (p <= 0 ? TOTAL_PAGES - 1 : p - 1));
   }, []);
 
   useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(next, 6000);
+    if (paused || !inView) return;
+    const timer = setInterval(next, 8000);
     return () => clearInterval(timer);
-  }, [paused, next]);
+  }, [paused, inView, next]);
 
   function handleInteraction(callback: () => void) {
     setPaused(true);
@@ -98,68 +147,46 @@ export default function Testimonials() {
     setTimeout(() => setPaused(false), 10000);
   }
 
-  const t = TESTIMONIALS[current];
+  const startIdx = page * PER_PAGE;
+  const visible = TESTIMONIALS.slice(startIdx, startIdx + PER_PAGE);
 
   return (
-    <Section bg="white">
+    <Section bg="gray">
       <Container>
         <AnimateOnScroll>
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Что говорят клиенты</h2>
           <p className="mt-2 text-center text-neutral-500">Как предприниматели развивают бизнес с KMFC</p>
         </AnimateOnScroll>
 
-        <div className="mx-auto mt-10 max-w-2xl">
-          <div className="relative rounded-2xl bg-neutral-50 p-6 sm:p-8">
-            <Quote size={32} strokeWidth={1.5} className="absolute right-6 top-6 text-brand-100" />
-
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
-                {t.initials}
-              </div>
-              <div>
-                <div className="font-semibold text-neutral-800">{t.name}</div>
-                <div className="text-sm text-neutral-500">{t.city} &middot; {t.purpose}</div>
-              </div>
-            </div>
-
-            <div className="mt-4 flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  strokeWidth={1.5}
-                  className={i < t.rating ? "fill-accent-400 text-accent-400" : "text-neutral-300"}
-                />
-              ))}
-            </div>
-
-            <blockquote className="mt-3 leading-relaxed text-neutral-700">
-              &ldquo;{t.text}&rdquo;
-            </blockquote>
+        <div ref={sectionRef} className="mt-10">
+          <div className="grid gap-4 md:grid-cols-2">
+            {visible.map((t) => (
+              <TestimonialCard key={t.name} t={t} />
+            ))}
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-4">
             <button
               onClick={() => handleInteraction(prev)}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition-colors hover:bg-brand-50 hover:text-brand-500"
-              aria-label="Предыдущий отзыв"
+              aria-label="Предыдущие отзывы"
             >
               <ChevronLeft size={20} strokeWidth={2} />
             </button>
             <div className="flex gap-2">
-              {TESTIMONIALS.map((_, i) => (
+              {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => handleInteraction(() => setCurrent(i))}
-                  className={`h-2 rounded-full transition-all ${i === current ? "w-6 bg-brand-500" : "w-2 bg-neutral-300"}`}
-                  aria-label={`Отзыв ${i + 1}`}
+                  onClick={() => handleInteraction(() => setPage(i))}
+                  className={`h-2 rounded-full transition-all ${i === page ? "w-6 bg-brand-500" : "w-2 bg-neutral-300"}`}
+                  aria-label={`Страница ${i + 1}`}
                 />
               ))}
             </div>
             <button
               onClick={() => handleInteraction(next)}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition-colors hover:bg-brand-50 hover:text-brand-500"
-              aria-label="Следующий отзыв"
+              aria-label="Следующие отзывы"
             >
               <ChevronRight size={20} strokeWidth={2} />
             </button>

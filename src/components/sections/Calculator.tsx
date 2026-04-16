@@ -115,11 +115,11 @@ export default function Calculator({
   return (
     <section
       id="calculator"
-      className="bg-gradient-to-b from-brand-50 to-white py-16 sm:py-20"
+      className="bg-neutral-50 py-16 sm:py-20"
     >
       <Container>
         <AnimateOnScroll>
-          <div className="rounded-3xl bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] ring-1 ring-neutral-100 sm:p-10 lg:p-12">
+          <div className="rounded-3xl bg-white p-6 ring-1 ring-neutral-100 sm:p-10 lg:p-12">
             <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl">
               Рассчитайте платёж по кредиту
             </h2>
@@ -190,6 +190,28 @@ export default function Calculator({
                     >
                       ₸
                     </span>
+                  </div>
+                  <div className="relative mt-4 flex h-6 items-center">
+                    <div className="absolute inset-x-0 h-1.5 rounded-full bg-neutral-200" />
+                    <div
+                      className="absolute left-0 h-1.5 rounded-full bg-brand-500"
+                      style={{
+                        width: `${((Math.max(minAmount, amount) - minAmount) / (maxAmount - minAmount)) * 100}%`,
+                      }}
+                    />
+                    <input
+                      type="range"
+                      min={minAmount}
+                      max={maxAmount}
+                      step={200_000}
+                      value={Math.max(minAmount, amount)}
+                      onChange={(e) => {
+                        const v = Number(e.target.value);
+                        setAmount(v);
+                        setAmountInput(null);
+                      }}
+                      className="relative z-10 h-6 w-full cursor-pointer appearance-none bg-transparent [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-brand-500 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-md [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-brand-500 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md"
+                    />
                   </div>
                   <div
                     className={`mt-1.5 text-xs ${

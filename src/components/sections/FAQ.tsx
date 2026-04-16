@@ -50,7 +50,7 @@ export default function FAQ({ data }: { data: FAQItem[] }) {
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Частые вопросы</h2>
         </AnimateOnScroll>
 
-        <div className="mx-auto mt-10 max-w-3xl rounded-3xl bg-white px-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] ring-1 ring-neutral-100 sm:px-8">
+        <div className="mx-auto mt-10 max-w-3xl rounded-3xl bg-white px-6 ring-1 ring-neutral-100 sm:px-8">
           <div className="divide-y divide-neutral-200">
             {data.map((item, i) => (
               <AccordionItem

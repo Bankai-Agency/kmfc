@@ -13,7 +13,7 @@ const SIGNALS = [
 
 export default function TrustSignals() {
   return (
-    <div className="border-y border-neutral-100 bg-white py-8">
+    <div className="border-y border-neutral-100 bg-neutral-50 py-8">
       <Container>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {SIGNALS.map((s) => (

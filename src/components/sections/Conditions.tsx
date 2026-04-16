@@ -5,10 +5,10 @@ import { CheckCircle, MapPin } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 
-const CARD_BASE =
-  "relative h-full overflow-hidden rounded-3xl bg-white p-8 shadow-[0_4px_24px_rgba(15,23,42,0.06)] ring-1 ring-neutral-100";
+const CARD_STYLE =
+  "relative h-full rounded-3xl bg-white p-8 ring-1 ring-neutral-100";
+const CARD_BASE = `${CARD_STYLE} overflow-hidden`;
 
 // Bento placement:
 // item 0 — big left (col 1, rows 1-2)
@@ -65,24 +65,27 @@ export default function Conditions({ data }: { data: ConditionsData }) {
           </div>
         </AnimateOnScroll>
 
-        <div className="mt-10 grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid auto-rows-[minmax(160px,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.items.map((item, i) => (
             <AnimateOnScroll
               key={item.label}
               delay={i * 0.1}
               className={`h-full ${BENTO_CLASSES[i]}`}
             >
-              {/* Big: vertical, image fills top, text centered at bottom */}
+              {/* Big: vertical, image top + text bottom */}
               {i === 0 && (
-                <div className={`${CARD_BASE} flex flex-col`}>
-                  <div className="flex min-h-[160px] flex-1 items-center justify-center">
-                    <ImagePlaceholder
-                      label="Сумма кредита"
-                      aspectRatio=""
-                      className="h-full w-full"
+                <div className={`${CARD_BASE} flex flex-col justify-end`}>
+                  {/* Blur circle */}
+                  <div className="absolute left-[12%] top-[-30%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
+                  {/* Illustration */}
+                  <div className="absolute inset-x-0 top-4 flex h-[65%] items-center justify-end -right-2">
+                    <img
+                      src="/images/conditions-amount.png"
+                      alt="Сумма кредита"
+                      className="h-full max-w-none object-contain drop-shadow-lg"
                     />
                   </div>
-                  <div className="pt-8">
+                  <div className="relative z-10 pt-6">
                     <ValueLabel value={item.value} label={item.label} size="lg" />
                   </div>
                 </div>
@@ -90,24 +93,30 @@ export default function Conditions({ data }: { data: ConditionsData }) {
 
               {/* Wide: horizontal, text left + image right */}
               {i === 1 && (
-                <div className={`${CARD_BASE} flex items-center gap-6`}>
-                  <div className="flex-1">
+                <div className={`${CARD_BASE} flex items-center`}>
+                  {/* Blur circle */}
+                  <div className="absolute right-[10%] top-[-40%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
+                  <div className="relative z-10 flex-1">
                     <ValueLabel value={item.value} label={item.label} size="md" align="left" />
                   </div>
-                  <div className="h-full max-h-[160px] w-40 shrink-0 sm:w-48">
-                    <ImagePlaceholder
-                      label="Процентная ставка"
-                      aspectRatio=""
-                      className="h-full w-full"
+                  {/* Rotated illustration */}
+                  <div className="absolute -right-4 top-1/2 flex h-[200%] w-[45%] -translate-y-1/2 items-center justify-center">
+                    <img
+                      src="/images/conditions-rate.png"
+                      alt="Процентная ставка"
+                      className="w-full max-w-none object-contain drop-shadow-lg"
                     />
                   </div>
                 </div>
               )}
 
-              {/* Small: vertical, centered text only */}
+              {/* Small cards with blur circles */}
               {i >= 2 && (
                 <div className={`${CARD_BASE} flex flex-col items-center justify-center`}>
-                  <ValueLabel value={item.value} label={item.label} size="md" />
+                  <div className="absolute right-[-40%] top-[-60%] h-[265px] w-[265px] rounded-full bg-brand-300/15 blur-[80px]" />
+                  <div className="relative z-10">
+                    <ValueLabel value={item.value} label={item.label} size="md" />
+                  </div>
                 </div>
               )}
             </AnimateOnScroll>
@@ -116,7 +125,7 @@ export default function Conditions({ data }: { data: ConditionsData }) {
 
         {/* Requirements */}
         <AnimateOnScroll delay={0.3}>
-          <div className="mt-4 rounded-3xl bg-white p-8 shadow-[0_4px_24px_rgba(15,23,42,0.06)] ring-1 ring-neutral-100 sm:p-10">
+          <div className="mt-4 rounded-3xl bg-white p-8 ring-1 ring-neutral-100 sm:p-10">
             <h3 className="text-lg font-semibold">Требования к залогу</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {data.requirements.map((req) => (

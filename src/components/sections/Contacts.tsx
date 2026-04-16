@@ -17,7 +17,7 @@ function telHref(phone: string): string {
 
 export default function Contacts() {
   return (
-    <Section bg="white">
+    <Section bg="gray">
       <Container>
         <AnimateOnScroll>
           <h2 className="text-center text-2xl font-bold sm:text-3xl">Контакты</h2>
@@ -59,7 +59,7 @@ export default function Contacts() {
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
           {CONTACT_INFO.offices.map((office, i) => (
             <AnimateOnScroll key={office.city} delay={i * 0.1}>
-              <div className="overflow-hidden rounded-2xl bg-neutral-50">
+              <div className="overflow-hidden rounded-2xl bg-neutral-100">
                 <img
                   src={OFFICE_IMAGES[office.city] ?? ""}
                   alt={`Офис KMFC в ${office.city}`}

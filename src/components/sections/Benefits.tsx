@@ -15,7 +15,7 @@ export default function Benefits({ data }: { data: Benefit[] }) {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {data.map((b, i) => (
             <AnimateOnScroll key={b.title} delay={i * 0.1}>
-              <div className="flex h-full flex-col rounded-2xl bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8">
+              <div className="flex h-full flex-col rounded-2xl bg-white p-6 transition-all duration-300 hover:-translate-y-1 sm:p-8">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100">
                   <b.icon size={24} strokeWidth={1.8} className="text-brand-600" />
                 </div>
